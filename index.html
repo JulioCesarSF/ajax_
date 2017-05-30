@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link type="text/css" rel="stylesheet" href="./resources/css/bootstrap.min.css">
+    <title>Ajax</title>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!--Título-->
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="page-header">
+                    <div class="col-md-12">
+                        <h1>Página de consumo de API com Ajax</h1>
+                    </div>
+                    <div class="col-md-10">
+                        <p>Consumo de api Star Wars : <a href="https://swapi.co/">https://swapi.co/</a> </p>
+                    </div>
+                    <div class="col-md-2">
+                        <p><a href="https://jquery.com/">jQuery / Ajax</a></p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!--Listar-->
+        <div class="row">
+
+            <div class="col-md-6 col-md-offset-2">
+                <div class="text-left">
+                    <h3>Lista</h3>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <button id="btnListar" class="btn btn-primary pull-right">Listar</button>
+                    <table class="table" id="tabelaPersonagem">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Cor do Cabelo</th>
+                                <th>Altura</th>
+                                <th>Adicionado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <div class="footer navbar-fixed-bottom">
+        Júlio César Schincariol Filho - 2017
+    </div>
+
+    <script type="text/javascript" src="./resources/js/jquery-3.2.1.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            //url da api
+            var URL_API = 'http://swapi.co/api/people/';
+
+            //Listar
+            $('#btnListar').click(function () {
+                $.ajax({
+                    url: URL_API,
+                    dataType: 'json',
+                    success: function (response) {
+
+                        //limpar a tabela para inserir novas linhas
+                        $('#tabelaPersonagem tbody > tr').remove();
+
+                        //pegar os elementos do json
+                        $.each(response.results, function (i, item) {
+                            //formatar nova linha
+                            var nome = "<td>" + item.name + "</td>";
+                            var cor_cabelo = "<td>" + item.hair_color + "</td>";
+                            var altura = "<td>" + item.height + "</td>";
+                            //formatar data sem plugin
+                            var data = new Date(item.created);
+                            var mes = data.getMonth() + 1;
+                            var adicionado = "<td>" + data.getDate() + "/" + mes + "/" + data.getFullYear() + "</td>"
+
+                            var row = "<tr>" + nome + cor_cabelo + altura + adicionado + "</tr>"
+
+                            //adicionar nova linha no tbody
+                            addRow(row);
+                        });
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
+
+            //função para adicionar uma nova linha na tabela
+            function addRow(row) {
+                $('#tabelaPersonagem > tbody').append(row);
+            }
+        });
+    </script>
+
+
+
+</body>
+
+</html>
